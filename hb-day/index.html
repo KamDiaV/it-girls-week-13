@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дни до дня рождения</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Дни до дня рождения 🎉</h1>
+    <label for="birthday">Выберите дату:</label>
+    <input type="date" id="birthday">
+    <button onclick="calculateDays()">Рассчитать</button>
+    
+    <p id="error">⚠️ Пожалуйста, введите дату рождения!</p>
+    <p id="result"></p>
+
+    <script>
+        function calculateDays() {
+            const input = document.getElementById('birthday');
+            const error = document.getElementById('error');
+            const result = document.getElementById('result');
+
+            if (!input.value) {
+                error.style.display = 'block';
+                result.textContent = '';
+                return;
+            } else {
+                error.style.display = 'none';
+            }
+
+            const today = new Date();
+            let birthday = new Date(input.value);
+            birthday.setFullYear(today.getFullYear());
+
+            if (birthday < today) {
+                birthday.setFullYear(today.getFullYear() + 1);
+            }
+
+            const diffTime = birthday - today;
+            const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            result.innerHTML = `До вашего дня рождения осталось <b>${daysLeft} ${getDayDeclension(daysLeft)}</b>! 🎂`;
+        }
+
+        function getDayDeclension(number) {
+            if (number % 10 === 1 && number % 100 !== 11) {
+                return "день";
+            } else if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) {
+                return "дня";
+            } else {
+                return "дней";
+            }
+        }
+    </script>
+
+</body>
+</html>
